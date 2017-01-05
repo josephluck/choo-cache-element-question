@@ -5,15 +5,19 @@ const Counter = require('./counter')
 
 const app = choo()
 const counterInstance = Counter()
+const counterInstanceTwo = Counter()
 
 app.model({
   state: {
-    count: 1,
+    count: 50,
     title: 'Hello'
   },
   reducers: {
     plus: function (state, amount) {
       return { count: state.count + amount }
+    },
+    minus: function (state, amount) {
+      return { count: state.count - amount }
     },
     updateTitle: function (state, title) {
       return { title: title }
@@ -24,22 +28,31 @@ app.model({
 const View = function (state, prev, send) {
   return html`
     <main>
-      <span>${state.count}</span>
-      <input value=${state.title} oninput=${updateTitle} />
-      <button onclick=${plusOne}>+1</button>
-      <button onclick=${plusTen}>+10</button>
+      <h3>Main app</h3>
+      <br />
+      <span>Counter from main app: ${state.count}</span>
+      <button onclick=${plus}>+1</button>
+      <button onclick=${minus}>-1</button>
       <hr />
-      ${counterInstance(state.count, state.title)}
+
+      <h3>Sub app</h3>
+      ${counterInstance({
+        count: state.count,
+        onIncrement: plus
+      })}
+      <br />
+      <br />
+      ${counterInstanceTwo({
+        count: state.count,
+        onIncrement: minus
+      })}
     </main>
   `
-  function plusOne () {
+  function plus () {
     send('plus', 1)
   }
-  function plusTen () {
-    send('plus', 10)
-  }
-  function updateTitle (e) {
-    send('updateTitle', e.target.value)
+  function minus () {
+    send('minus', 1)
   }
 }
 

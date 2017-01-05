@@ -13,7 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "cache-element": "^2.0.0",
-    "choo": "^4.0.3"
+    "choo": "^4.0.3",
+    "material-components-web": "^0.1.1"
   },
   "devDependencies": {
     "bel": "^4.5.0",
