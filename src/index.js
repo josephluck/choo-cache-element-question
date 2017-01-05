@@ -3,7 +3,7 @@ const html = require('choo/html')
 const componentify = require('./componentify')
 const app = choo()
 
-const inputComponent = componentify({
+const input = () => componentify({
   model: {
     state: {
       title: 'Hello!'
@@ -25,6 +25,9 @@ const inputComponent = componentify({
     `
   }
 })
+
+const inputComponentOne = input()
+const inputComponentTwo = input()
 
 app.model({
   state: {
@@ -58,7 +61,12 @@ const View = function (state, prev, send) {
       <hr />
 
       <h3>Component</h3>
-      ${inputComponent({
+      ${inputComponentOne({
+        count: state.count,
+        increment: () => plus()
+      })}
+      <br />
+      ${inputComponentTwo({
         count: state.count,
         increment: () => plus()
       })}

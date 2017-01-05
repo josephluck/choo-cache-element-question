@@ -20,12 +20,16 @@ module.exports = ({
 
   const component = choo()
   component.model(model)
-  component.router([ '/', memoStatePrevSend(view) ])
+  component.router({ default: '/' }, [ '/', memoStatePrevSend(view) ])
 
   return widget({
     render: function (props) {
       _props = props
-      return component.start()
+      return component.start({
+        href: false,
+        hash: false,
+        location: false
+      })
     },
     onupdate: function (old, props) {
       _props = props
