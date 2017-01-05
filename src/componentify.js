@@ -1,5 +1,6 @@
 const choo = require('choo')
 const widget = require('./widget')
+const morph = require('morphdom')
 
 const applyPropsToInitialState = (props) => {
   return {
@@ -38,7 +39,9 @@ module.exports = ({
     },
     onupdate: function (old, props) {
       _props = props
-      _send('receiveUpdateFromParent', props)
+      // All this needs to do is call rerender...
+      morph(old, view(_state, _props, _prev, _send))
+      // _send('updateParentState', props)
     }
   })
 }
