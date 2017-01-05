@@ -4,7 +4,7 @@
   "description": "",
   "main": "map.js",
   "scripts": {
-    "start": "budo src/index.js:dist/bundle.js --live --open",
+    "start": "budo src/index.js:dist/bundle.js --live --pushstate --open",
     "build": "mkdir -p dist && browserify src/index.js -o dist/bundle.js",
     "deploy": "npm run build && surge . -d choo-cache-element-question.surge.sh"
   },

@@ -3,20 +3,22 @@ const html = require('choo/html')
 const componentify = require('./componentify')
 const app = choo()
 
-const input = () => componentify({
+const createInputComponent = () => componentify({
   model: {
     state: {
       title: 'Hello!'
     },
     reducers: {
-      update (_, title) {
+      update (props, state, title) {
         return { title }
       }
     }
   },
-  view (state, props, prev, send) {
+  view (props, state, prev, send) {
     return html`
-      <div>
+      <div style="border: solid 1px black; padding: 10px;">
+        <b>${props.name}</b>
+        <br />
         <input value=${state.title} oninput=${(e) => send('update', e.target.value)} />
         <div>Local state title: ${state.title}</div>
         <div>Parent state counter: ${props.count}</div>
@@ -26,8 +28,49 @@ const input = () => componentify({
   }
 })
 
-const inputComponentOne = input()
-const inputComponentTwo = input()
+const inputComponentOne = createInputComponent()
+const inputComponentTwo = createInputComponent()
+
+const pageOne = function (state, prev, send) {
+  const plus = () => {
+    send('plus', 1)
+  }
+  const minus = () => {
+    send('minus', 1)
+  }
+
+  return html`
+    <main>
+      <a href="two">Page two</a>
+      <span>Counter from main app: ${state.count}</span>
+      <button onclick=${plus}>+1</button>
+      <button onclick=${minus}>-1</button>
+
+      <h3>Components: </h3>
+      ${inputComponentOne({
+        count: state.count,
+        name: 'One',
+        increment: () => plus()
+      })}
+      <br />
+      ${inputComponentTwo({
+        count: state.count,
+        name: 'Two',
+        increment: () => plus()
+      })}
+    </main>
+  `
+}
+
+const pageTwo = function (state, prev, send) {
+  console.log('Should render pageTwo')
+  return html`
+    <main>
+      <a href="one">Page one</a>
+      <span>Counter from main app: ${state.count}</span>
+    </main>
+  `
+}
 
 app.model({
   state: {
@@ -47,41 +90,9 @@ app.model({
   }
 })
 
-const View = function (state, prev, send) {
-  return html`
-    <main>
-      <h3>Main app</h3>
-
-      <br />
-
-      <span>Counter from main app: ${state.count}</span>
-      <button onclick=${plus}>+1</button>
-      <button onclick=${minus}>-1</button>
-
-      <hr />
-
-      <h3>Component</h3>
-      ${inputComponentOne({
-        count: state.count,
-        increment: () => plus()
-      })}
-      <br />
-      ${inputComponentTwo({
-        count: state.count,
-        increment: () => plus()
-      })}
-    </main>
-  `
-  function plus () {
-    send('plus', 1)
-  }
-  function minus () {
-    send('minus', 1)
-  }
-}
-
 app.router([
-  ['/', View]
+  ['/one', pageOne],
+  ['/two', pageTwo]
 ])
 
 const tree = app.start()
