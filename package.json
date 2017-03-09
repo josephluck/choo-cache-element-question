@@ -14,11 +14,11 @@
   "dependencies": {
     "cache-element": "^2.0.0",
     "choo": "^4.0.3",
-    "material-components-web": "^0.1.1"
+    "material-components-web": "^0.6.0"
   },
   "devDependencies": {
     "bel": "^4.5.0",
-    "browserify": "^13.1.1",
+    "browserify": "^14.1.0",
     "budo": "^9.4.1",
     "surge": "^0.18.0"
   }
